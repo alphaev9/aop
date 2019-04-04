@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="advice" />
+        <module name="advisor" />
+        <module name="aotoProxy" />
+        <module name="aspectj" />
+        <module name="crosscutting" />
+        <module name="domain" />
+        <module name="proxy" />
+        <module name="schema" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="advice" options="" />
+      <module name="advisor" options="" />
+      <module name="aop" options="" />
+      <module name="aotoProxy" options="" />
+      <module name="aspectj" options="" />
+      <module name="crosscutting" options="" />
+      <module name="domain" options="" />
+      <module name="proxy" options="" />
+      <module name="schema" options="" />
+    </option>
+  </component>
+</project>

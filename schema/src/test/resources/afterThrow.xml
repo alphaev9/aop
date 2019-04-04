@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <import resource="parent.xml"></import>
+    <aop:config proxy-target-class="true">
+        <!--this point will match all method in interface Vehicle-->
+        <aop:pointcut id="throw" expression="execution(* com.alpha.aop.domain.Vehicle.*(..))"></aop:pointcut>
+        <aop:aspect ref="adviceMethods">
+            <aop:after-throwing method="afterThrow" throwing="failure" pointcut-ref="throw"></aop:after-throwing>
+        </aop:aspect>
+    </aop:config>
+</beans>

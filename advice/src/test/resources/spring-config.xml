@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="sedan" class="com.alpha.aop.domain.Sedan"></bean>
+    <bean id="beforeRunning" class="com.alpha.aop.advice.BeforeRunning"></bean>
+
+    <!--created proxy based on JDK dynamical Proxy,you have to provide interfaces which the target class implements-->
+    <bean id="sedanProxy" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="com.alpha.aop.domain.Vehicle"
+          p:interceptorNames="beforeRunning"
+          p:target-ref="sedan">
+    </bean>
+
+    <!--created proxy based on cglib.because by this way,you can directly process byte code,the interfaces is ignored-->
+    <bean id="cglibProxy" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="beforeRunning"
+          p:target-ref="sedan"
+          p:proxyTargetClass="true">
+    </bean>
+
+    <!--notice:the functionality of introduce advice is making target class implementing a interface dynamically,so the interface is necessary.
+    but you have to remember the underground engine is still the cglib -->
+    <bean id="introduceAdvice" class="com.alpha.aop.advice.IntroduceAdvice"></bean>
+    <bean id="navigableSeadan" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="introduceAdvice"
+          p:target-ref="sedan"
+          p:proxyTargetClass="true"
+          p:interfaces="com.alpha.aop.advice.Navigable">
+    </bean>
+</beans>

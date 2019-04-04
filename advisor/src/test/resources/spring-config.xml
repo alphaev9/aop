@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--for description of advisor assembling logic,except using java code ,another way is using spring configuration file-->
+
+    <bean id="beforeAdvice" class="com.alpha.aop.advice.BeforeRunning"></bean>
+    <bean id="staticAdvisor" class="com.alpha.aop.advisor.StaticAdvisor"
+          p:advice-ref="beforeAdvice">
+    </bean>
+    <bean id="staticParent" class="org.springframework.aop.framework.ProxyFactoryBean"
+          abstract="true"
+          p:interceptorNames="staticAdvisor"
+          p:proxyTargetClass="true">
+    </bean>
+    <bean id="sedan1" parent="staticParent" p:target-ref="sedan"></bean>
+    <bean id="truck1" parent="staticParent" p:target-ref="truck"></bean>
+
+    <bean id="sedan" class="com.alpha.aop.domain.Sedan"></bean>
+    <bean id="truck" class="com.alpha.aop.domain.Truck"></bean>
+
+
+    <!--using advisor based on regular expression,it is not necessary extends any super class,RegexpMethodPointcutAdvisor has enough ability  -->
+    <bean id="regexpAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor"
+          p:advice-ref="beforeAdvice" p:patterns-ref="patterns">
+    </bean>
+    <!--notice: you should be very careful for the definition of the regular expression patterns
+    especially,the pattern string matching a method follows the method qualified name -->
+    <util:list id="patterns">
+        <value>.*main.*</value>
+    </util:list>
+    <bean id="regexpParent" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="regexpAdvisor"
+          p:proxyTargetClass="true">
+    </bean>
+    <bean id="sedan2" parent="regexpParent" p:target-ref="sedan"></bean>
+    <bean id="truck2" parent="regexpParent" p:target-ref="truck"></bean>
+
+
+    <!--DefaultPointcutAdvisor can be used to compose any advice and pointcut into a advisor.
+    comparing with other advisors,it is general being appropriate for any case-->
+    <bean id="dynamicPointcut" class="com.alpha.aop.advisor.DynamicPointCut"></bean>
+    <bean id="dynamicAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor"
+          p:pointcut-ref="dynamicPointcut"
+          p:advice-ref="beforeAdvice">
+    </bean>
+    <bean id="dynamicParent" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="dynamicAdvisor"
+          p:proxyTargetClass="true">
+    </bean>
+    <bean id="sedan3" parent="dynamicParent" p:target-ref="sedan"></bean>
+    <bean id="truck3" parent="dynamicParent" p:target-ref="truck"></bean>
+
+
+    <!--control flow advisor:the underground mechanism presents as following
+    -->
+    <bean id="controlFlowPointcut" class="org.springframework.aop.support.ControlFlowPointcut"
+          c:clazz="com.alpha.aop.advisor.ControlFlowDemo"
+          c:methodName="transport">
+    </bean>
+    <bean id="controlFlowAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor"
+          p:pointcut-ref="controlFlowPointcut"
+          p:advice-ref="beforeAdvice">
+    </bean>
+    <bean id="controlFlowParent" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:interceptorNames="controlFlowAdvisor"
+          p:proxyTargetClass="true">
+    </bean>
+    <bean id="sedan4" parent="controlFlowParent" p:target-ref="sedan"></bean>
+
+</beans>

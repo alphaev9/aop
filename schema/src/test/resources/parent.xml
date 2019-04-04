@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="adviceMethods" class="com.alpha.aop.schema.AdviceMethods"></bean>
+    <bean id="sedan" class="com.alpha.aop.domain.Sedan"></bean>
+    <bean id="truck" class="com.alpha.aop.domain.Truck"></bean>
+</beans>
